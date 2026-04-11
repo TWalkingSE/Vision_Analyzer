@@ -1,0 +1,84 @@
+# ============================================
+# Vision Analyzer v4.0 - Dependencies
+# ============================================
+# Python 3.10+ required
+# Este ciclo de hardening nao adicionou novas dependencias obrigatorias,
+# mas passou a declarar pisos/faixas para tornar o ambiente mais previsivel.
+
+# Core AI Libraries
+openai>=1.30.0,<2.0.0
+ollama>=0.2.0,<1.0.0
+
+# Image Processing
+Pillow>=10.0.0,<12.0.0
+pillow-heif>=0.16.0
+numpy>=1.24.0,<3.0.0
+opencv-python-headless>=4.8.0,<5.0.0
+tqdm>=4.66.0,<5.0.0
+
+# RAW Image Support
+rawpy>=0.19.0
+imageio>=2.34.0
+
+# Environment Management
+python-dotenv>=1.0.0,<2.0.0
+
+# Web Interface
+streamlit>=1.30.0,<2.0.0
+
+# OCR via Ollama (não requer pacotes Python adicionais)
+# Use: ollama pull glm-ocr:bf16
+# Use: ollama pull richardyoung/olmocr2:7b-q8
+
+# ============================================
+# Exportação de Relatórios
+# ============================================
+# PDF Export
+reportlab>=4.0.0,<5.0.0
+
+# DOCX Export (Word)
+python-docx>=1.1.0,<2.0.0
+
+# Testes
+pytest>=8.0.0,<10.0.0
+
+# ============================================
+# PyTorch com CUDA (Aceleração GPU)
+# ============================================
+# O pip install padrão instala a versão CPU-only.
+# Para habilitar GPU, desinstale e reinstale com o índice CUDA correto:
+#
+#   pip uninstall torch torchvision torchaudio -y
+#
+# RTX 30xx (Ampere)  — CUDA 12.6:
+#   pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu126
+#
+# RTX 40xx (Ada Lovelace) — CUDA 12.6 ou 12.8:
+#   pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu126
+#   pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu128
+#
+# RTX 50xx (Blackwell) — CUDA 12.8:
+#   pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu128
+#
+# Consulte https://pytorch.org/get-started/locally/ para outras versões.
+torch>=2.6.0,<3.0.0
+torchvision>=0.21.0,<1.0.0
+torchaudio>=2.6.0,<3.0.0
+
+# ============================================
+# Detecção de Objetos
+# ============================================
+# YOLO11 - Detecção rápida e leve
+ultralytics>=8.0.0,<9.0.0
+
+# Detectron2 - Detecção avançada para cenas complexas (OPCIONAL)
+# Sem suporte oficial para Windows — veja o README para instruções detalhadas.
+# Linux/WSL2: pip install 'git+https://github.com/facebookresearch/detectron2.git'
+# Windows: requer build manual ou WSL2 (consulte README seção "Instalação do Detectron2")
+# detectron2
+
+# ============================================
+# Busca Semântica (OPCIONAL)
+# ============================================
+# chromadb>=0.5.0
+# Usa embeddings locais via Ollama (pacote `ollama` ja incluido acima)
