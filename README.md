@@ -3,6 +3,9 @@
 Sistema avançado de análise individual e em lote com pipeline de 5 estágios: **Pré-processamento → Detecção de Objetos → OCR → LLM → Pós-processamento**. Combina OpenAI GPT-5.4-mini + Ollama local, detecção YOLO11/Detectron2, OCR via GLM/OLMoOCR2, e pós-processamento estruturado com extração de entidades, classificação e validação. A interface Streamlit e a CLI compartilham o mesmo pipeline de execução e exportação, com preflight, telemetria por etapa e reaproveitamento de dados intermediários do cache.
 
 > **Interface gráfica Streamlit** com análise de imagem única e em lote, chat interativo com IA, detecção de objetos com auto-crop, detecção de manipulação (ELA), comparador A/B, dashboard de métricas, extração de frames de vídeo, upload drag-and-drop e visualizador de relatórios integrado.
+>
+> <img width="3386" height="1300" alt="image" src="https://github.com/user-attachments/assets/140cf00c-4315-44f1-b7de-c8a3f2cfbcc2" />
+
 
 ## ✨ Funcionalidades
 
