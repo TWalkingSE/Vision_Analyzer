@@ -760,14 +760,16 @@ pip install pillow-heif
 pip install rawpy imageio
 ```
 
-### "PaddleOCR não disponível"
+### "OCR via Ollama não disponível"
 ```bash
-pip install paddlepaddle paddleocr
-```
+# Baixar pelo menos um engine suportado pelo projeto
+ollama pull glm-ocr:bf16
 
-### "EasyOCR não disponível"
-```bash
-pip install easyocr
+# Alternativa
+ollama pull richardyoung/olmocr2:7b-q8
+
+# Confirmar se o modelo foi instalado
+ollama list
 ```
 
 ### "Busca Semântica indisponível"
