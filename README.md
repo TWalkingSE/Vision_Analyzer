@@ -6,7 +6,6 @@ Sistema avançado de análise individual e em lote com pipeline de 5 estágios: 
 >
 > <img width="3386" height="1300" alt="image" src="https://github.com/user-attachments/assets/140cf00c-4315-44f1-b7de-c8a3f2cfbcc2" />
 
-
 ## ✨ Funcionalidades
 
 - **Pipeline de 5 estágios**: Pré-processamento → Detecção → OCR → LLM → Pós-processamento
@@ -37,6 +36,23 @@ Sistema avançado de análise individual e em lote com pipeline de 5 estágios: 
 - **Busca Semântica Local**: Indexação vetorial com ChromaDB + embeddings locais via Ollama
 - **Extração de Vídeo**: Decupagem automática de keyframes
 - **API Utils**: Rate limiting, retry com backoff exponencial
+
+---
+
+## 🔐 Requisições Externas e Saída de Dados
+
+Sim. Em runtime, o projeto faz chamadas de rede apenas nos cenários abaixo:
+
+| Recurso | Destino padrão | Quando acontece | Dados enviados |
+|---------|----------------|-----------------|----------------|
+| **OpenAI (`gpt-5.4-mini`)** | API OpenAI (internet) | Quando um modelo `openai` é selecionado na UI, CLI, comparador A/B ou chat | Prompt de sistema, mensagem do usuário e, nas análises visuais, a imagem convertida para JPEG em base64 |
+| **Ollama para visão/OCR/chat** | `http://localhost:11434` | Quando você usa modelos Ollama para análise, OCR, chat, checagem de disponibilidade (`ollama.list()`) ou descarregamento de modelo (`keep_alive=0`) | Prompt, histórico do chat quando aplicável e imagem em base64; nos checks de disponibilidade/descarregamento, apenas comandos/metadados do modelo |
+| **Busca semântica com embeddings Ollama** | `http://localhost:11434` ou `VISION_SEMANTIC_SEARCH_OLLAMA_URL` | Quando você indexa relatórios ou executa buscas semânticas | Conteúdo textual dos relatórios `.md` durante a indexação e o texto da consulta durante a busca |
+
+- Se o Ollama estiver no host local padrão (`localhost`), o tráfego fica restrito à própria máquina.
+- Se `OLLAMA_HOST` ou `VISION_SEMANTIC_SEARCH_OLLAMA_URL` apontarem para outro servidor, imagens, prompts, histórico do chat e textos dos relatórios usados nessas etapas sairão da máquina e trafegarão até esse host.
+- Fora desses casos, não foram encontradas outras integrações HTTP/HTTPS de runtime no código. Cache, YOLO, ELA, pós-processamento, exportação e relatórios funcionam localmente.
+- Downloads de instalação (`pip install`, `ollama pull`, PyTorch/Detectron2/GitHub) acontecem apenas no setup do ambiente, não durante a análise normal das imagens.
 
 ---
 
@@ -152,6 +168,8 @@ OPENAI_API_KEY=sk-sua-chave-aqui
 # VISION_SEMANTIC_SEARCH_OLLAMA_URL=http://localhost:11434
 # VISION_SEMANTIC_SEARCH_MODEL=nomic-embed-text
 ```
+
+> **Atenção:** se `OLLAMA_HOST` ou `VISION_SEMANTIC_SEARCH_OLLAMA_URL` apontarem para outro host, os dados usados nessas etapas deixam a máquina local e passam a ser enviados para esse servidor.
 
 ### 5. Baixar modelos Ollama
 
@@ -462,6 +480,8 @@ ollama pull nomic-embed-text
 4. Clique em **Abrir relatório** para carregar diretamente o laudo correspondente no visualizador da aba ao lado
 
 Por padrão, o modelo de embedding usado é `nomic-embed-text` no Ollama local. Se quiser trocar, defina `VISION_SEMANTIC_SEARCH_MODEL` no `.env`.
+
+> Se você configurar `VISION_SEMANTIC_SEARCH_OLLAMA_URL` para um Ollama remoto, o conteúdo dos relatórios indexados e as consultas digitadas nessa busca serão enviados para esse servidor.
 
 ---
 
