@@ -74,6 +74,13 @@ pytest>=8.0.0,<10.0.0
 #   pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu128
 #
 # Consulte https://pytorch.org/get-started/locally/ para outras versões.
+#
+# SEGURANÇA (pendente): torch 2.13.0 corrige a CVE-2025-3000 (PYSEC-2025-194,
+# RCE via torch.load de pesos maliciosos). Em Windows, o 2.13.0 ainda só existe
+# no PyPI como build CPU-only; o índice cu128 (necessário para RTX 50xx) para
+# na 2.11.0. Quando a build 2.13.0+cu128 for publicada, atualizar. Mitigação
+# atual: carregar apenas pesos .pt oficiais da Ultralytics. Verificar com:
+#   pip index versions torch --index-url https://download.pytorch.org/whl/cu128
 torch>=2.6.0,<3.0.0
 torchvision>=0.21.0,<1.0.0
 torchaudio>=2.6.0,<3.0.0
