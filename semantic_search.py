@@ -58,8 +58,12 @@ class SemanticSearchEngine:
         if not CHROMA_AVAILABLE:
             raise ImportError("Instale a biblioteca opcional: pip install chromadb")
 
-        # Usar chroma persistente local
-        self.client = chromadb.PersistentClient(path=str(self.db_path))
+        # Usar chroma persistente local. anonymized_telemetry=False desativa o
+        # envio de métricas de uso (PostHog) — o app é 100% local por design.
+        self.client = chromadb.PersistentClient(
+            path=str(self.db_path),
+            settings=chromadb.Settings(anonymized_telemetry=False),
+        )
         
         # Embeddings locais via Ollama evitam dependencias do HF Hub em runtime.
         self.embedding_fn = embedding_functions.OllamaEmbeddingFunction(

@@ -12,8 +12,12 @@ def test_semantic_search_uses_local_ollama_embeddings_by_default(monkeypatch, tm
             captured["model_name"] = model_name
             captured["timeout"] = timeout
 
+    class FakeSettings:
+        def __init__(self, anonymized_telemetry=True):
+            captured["anonymized_telemetry"] = anonymized_telemetry
+
     class FakeClient:
-        def __init__(self, path):
+        def __init__(self, path, settings=None):
             captured["db_path"] = path
 
         def get_or_create_collection(self, name, embedding_function):
@@ -25,7 +29,7 @@ def test_semantic_search_uses_local_ollama_embeddings_by_default(monkeypatch, tm
     monkeypatch.setattr(
         semantic_search,
         "chromadb",
-        SimpleNamespace(PersistentClient=FakeClient),
+        SimpleNamespace(PersistentClient=FakeClient, Settings=FakeSettings),
     )
     monkeypatch.setattr(
         semantic_search,
@@ -41,6 +45,7 @@ def test_semantic_search_uses_local_ollama_embeddings_by_default(monkeypatch, tm
     assert captured["model_name"] == semantic_search.DEFAULT_OLLAMA_EMBED_MODEL
     assert captured["timeout"] == 60
     assert captured["collection_name"] == "vision_analyzer_reports"
+    assert captured["anonymized_telemetry"] is False
 
 
 def test_semantic_search_allows_env_override_for_local_backend(monkeypatch, tmp_path):
@@ -53,7 +58,7 @@ def test_semantic_search_allows_env_override_for_local_backend(monkeypatch, tmp_
             captured["timeout"] = timeout
 
     class FakeClient:
-        def __init__(self, path):
+        def __init__(self, path, settings=None):
             pass
 
         def get_or_create_collection(self, name, embedding_function):
@@ -65,7 +70,10 @@ def test_semantic_search_allows_env_override_for_local_backend(monkeypatch, tmp_
     monkeypatch.setattr(
         semantic_search,
         "chromadb",
-        SimpleNamespace(PersistentClient=FakeClient),
+        SimpleNamespace(
+            PersistentClient=FakeClient,
+            Settings=lambda **kwargs: SimpleNamespace(**kwargs),
+        ),
     )
     monkeypatch.setattr(
         semantic_search,
