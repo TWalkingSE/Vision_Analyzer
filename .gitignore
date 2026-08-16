@@ -1,0 +1,42 @@
+# Environment variables (contains API keys)
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual environment
+venv/
+.venv/
+env/
+
+# YOLO models (large binary files)
+*.pt
+
+# Cache and data
+.vision_cache/
+.vision_prompts/
+.chroma_db/
+.pytest_cache/
+*.pytest_cache
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Input/output data directories (keep only .gitkeep for structure)
+imagens_entrada/*
+!imagens_entrada/.gitkeep
+relatorios_saida/*
+!relatorios_saida/.gitkeep
